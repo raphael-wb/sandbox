@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <ProjectGuid>{654B85A3-1069-49D8-8A68-3E5CEEDC9B56}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Rwb</RootNamespace>
+    <AssemblyName>Rwb.PowerShell</AssemblyName>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <PackageType>PowerShellModule</PackageType>
+    <PackageName>Rwb</PackageName>
+  </PropertyGroup>
+  <ItemGroup>
+    <AssemblyInternalsVisibleTo Include="Rwb.PowerShell.Testing">
+      <Visible>False</Visible>
+    </AssemblyInternalsVisibleTo>
+  </ItemGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' " />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' " />
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Management.Automation" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="**\*.cs" Exclude="**\*.Generated.cs;**\*.Designer.cs" />
+    <EmbeddedResource Include="Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <Compile Include="Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Content Include="Rwb.psd1">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Rwb\Rwb.csproj">
+      <Project>{91982615-4dc2-4e91-ac64-5ffd7f446e86}</Project>
+      <Name>Rwb</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(SolutionDir)Build\Rwb.Project.targets" />
+</Project>
