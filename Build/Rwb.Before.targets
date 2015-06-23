@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+Setup
+	Replace Microsoft.CSharp.targets import by Rwb.Project.targets in *.csproj files
+	or set CustomBeforeMicrosoftCommonTargets and CustomAfterMicrosoftCommonTargets
+	(through environment variables or build properties)
+
+Only applies to project with UseRwbDefaults == True or AssemblyName like Rwb.*
+
+Singular behaviours:
+	* TreatWarningsAsErrors
+
+	* Sign by default if .snk is found at default location
+
+	* Default Version is 0.0.0.0
+
+	* Generate and reference AssemblyName.AssemblyInfo.Generated.cs file with
+	  - most common assembly attributes (see Rwb.After.targets)
+	  - [InternalsVisibleTo("$(AssemblyName).Tests, PublicKey=...")]
+
+	* Move build output ("obj" and "bin") to a "tmp" directory directly under $(SolutionDir)
+	* Merge all "obj" and "bin" folders from all projects (thus assumes AssemblyName is unique)
+-->
+
+<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<PropertyGroup>
+		<UseRwbDefaults Condition=" '$(UseRwbDefaults)' == '' ">$([System.Text.RegularExpressions.Regex]::IsMatch($(AssemblyName), '^Rwb(\.|%24)'))</UseRwbDefaults>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(UseRwbDefaults)' == 'True' ">
+		<Version Condition=" '$(Version)'=='' ">0.0.0.0</Version>
+
+		<AssemblyCompany Condition=" '$(AssemblyCompany)' == '' ">Raphaël WB</AssemblyCompany>
+		<AssemblyCopyright Condition=" '$(AssemblyCopyright)' == '' ">Copyright © $(AssemblyCompany) $([System.DateTime]::UtcNow.Year))</AssemblyCopyright>
+
+		<TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+
+		<AssemblyOriginatorKeyFile Condition=" '$(AssemblyOriginatorKeyFile)' == '' ">$(MSBuildThisFileDirectory)Key.snk</AssemblyOriginatorKeyFile>
+		<SignAssembly Condition=" '$(SignAssembly)' == '' And Exists('$(AssemblyOriginatorKeyFile)') ">True</SignAssembly>
+
+		<AssemblyPublicKey Condition=" '$(AssemblyPublicKey)' == '' And '$(SignAssembly)' == 'True' ">002400000480000014010000060200000024000052534131000800000100010041b4202f8b283297e48589ae0039b76ee2a67555d260a3596e8afb45a0259d55279739da7be3e76400b417aba88eefe60158943f660aa8309cf24c589e1a22be5760667c7796ee2c780f1d13e5e6d0dafed98e27f4198786b03372f5138c96fcb840ca6d1b2c121ff6b0c2ced1cc5f45e1991bdfe0c3aae59366b30bd4de503b4771ad129a0d596660963f8fce510a53cc1ce1126ceffff66c196914f21fd64a54a22234cb357dbd6aad7a7b1010056f6c4173c33e459150ed547a2597f78272cefb36f5923ee19cc938be4efe17e6f3839d5be0b70ee83415ad853ba989e987fa152c92d71200832ac8eacba7a7754800b2d42186023e99c395270e547190c2</AssemblyPublicKey>
+		<!-- UnitTestsAssembyName: used to generate the InternalsVisibleTo assembly attribute, which must contains the PublicKey when tested assembly is signed -->
+		<UnitTestsAssembyName Condition=" !$(AssemblyName.EndsWith(&quot;.Tests&quot;)) ">$(AssemblyName).Tests</UnitTestsAssembyName>
+		<UnitTestsAssembyName Condition=" '$(UnitTestsAssembyName)' != '' And '$(AssemblyPublicKey)' != '' ">$(UnitTestsAssembyName), PublicKey=$(AssemblyPublicKey)</UnitTestsAssembyName>
+
+		<TmpDir Condition="'$(TmpDir)' == ''">$(SolutionDir)tmp\</TmpDir>
+		<OutputPath>$(TmpDir)bin\</OutputPath>
+		<BaseIntermediateOutputPath Condition="'$(BaseIntermediateOutputPath)' == ''">$(TmpDir)obj\</BaseIntermediateOutputPath>
+		<GeneratedAssemblyInfoPath>$(BaseIntermediateOutputPath)$(AssemblyName).AssemblyInfo.Generated.cs</GeneratedAssemblyInfoPath>
+
+		<!-- VS templates defaults -->
+		<Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+		<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+		<ErrorReport Condition=" '$(ErrorReport)' == '' ">prompt</ErrorReport>
+		<WarningLevel Condition=" '$(WarningLevel)' == '' ">4</WarningLevel>
+		<AppDesignerFolder Condition=" '$(AppDesignerFolder)' == '' ">Properties</AppDesignerFolder>
+	</PropertyGroup>
+
+	<!-- VS templates defaults -->
+	<PropertyGroup Condition=" '$(UseRwbDefaults)' == 'True' And '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+		<DebugSymbols Condition=" '$(DebugSymbols)' == '' ">True</DebugSymbols>
+		<DebugType Condition=" '$(DebugType)' == '' ">full</DebugType>
+		<Optimize Condition=" '$(Optimize)' == '' ">False</Optimize>
+		<DefineConstants Condition=" '$(PropertyGroup)' == '' ">DEBUG;TRACE</DefineConstants>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(UseRwbDefaults)' == 'True' And '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+		<DebugType Condition=" '$(DebugType)' == '' ">pdbonly</DebugType>
+		<Optimize Condition=" '$(Optimize)' == '' ">True</Optimize>
+		<DefineConstants Condition=" '$(DefineConstants)' == '' ">TRACE</DefineConstants>
+	</PropertyGroup>
+</Project>

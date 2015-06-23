@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Documentation: see Rwb.Before.targets -->
+
+<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<PropertyGroup Condition=" '$(UseRwbDefaults)' == 'True' ">
+		<PrepareForBuildDependsOn>$(PrepareForBuildDependsOn);GenerateAssemblyInfo</PrepareForBuildDependsOn>
+	</PropertyGroup>
+
+	<Target Name="GenerateAssemblyInfo">
+		<Error Condition=" '$(GeneratedAssemblyInfoPath)' == '' " Text="Property &quot;GeneratedAssemblyInfoPath&quot; is not set. Is &quot;Rwb.Before.targets&quot; imported?" />
+		<ItemGroup>
+			<AssemblyInfoLine Include="// Generated on $([System.DateTime]::UtcNow.ToString(&quot;o&quot;))" />
+			<AssemblyInfoLine Include="using System%3B" />
+			<AssemblyInfoLine Include="using System.Reflection%3B" />
+			<AssemblyInfoLine Include="using System.Runtime.CompilerServices%3B" />
+			<AssemblyInfoLine Include="using System.Runtime.InteropServices%3B" />
+			<AssemblyInfoLine Condition=" '$(AssemblyCompany)' != '' " Include="[assembly: AssemblyCompany(&quot;$(AssemblyCompany)&quot;)]" />
+			<AssemblyInfoLine Condition=" '$(AssemblyCopyright)' != '' " Include="[assembly: AssemblyCopyright(&quot;$(AssemblyCopyright)&quot;)]" />
+			<AssemblyInfoLine Condition=" '$(Configuration)' != '' " Include="[assembly: AssemblyConfiguration(&quot;$(Configuration)&quot;)]" />
+			<AssemblyInfoLine Include="[assembly: AssemblyCulture(&quot;&quot;)]" />
+			<AssemblyInfoLine Include="[assembly: AssemblyVersion(&quot;$(Version)&quot;)]" />
+			<AssemblyInfoLine Include="[assembly: AssemblyFileVersion(&quot;$(Version)&quot;)]" />
+			<AssemblyInfoLine Include="[assembly: AssemblyInformationalVersion(&quot;Version:$(Version), Commit: $(Commit)&quot;)]" />
+			<AssemblyInfoLine Condition=" '$(AssemblyCLSCompliant)' != '' " Include="[assembly: CLSCompliant($(AssemblyCLSCompliant.ToLowerInvariant()))]" />
+			<AssemblyInfoLine Include="[assembly: ComVisible(false)]" />
+			<AssemblyInfoLine Condition=" '$(UnitTestsAssembyName)' != '' " Include="[assembly: InternalsVisibleTo(&quot;$(UnitTestsAssembyName)&quot;)]" />
+			<AssemblyInfoLine Condition=" '@(AssemblyInternalsVisibleTo)' != '' And '$(AssemblyPublicKey)' == '' " Include="[assembly: InternalsVisibleTo(&quot;%(AssemblyInternalsVisibleTo.Identity)&quot;)]" />
+			<AssemblyInfoLine Condition=" '@(AssemblyInternalsVisibleTo)' != '' And '$(AssemblyPublicKey)' != '' " Include="[assembly: InternalsVisibleTo(&quot;%(AssemblyInternalsVisibleTo.Identity), PublicKey=$(AssemblyPublicKey)&quot;)]" />
+		</ItemGroup>
+		<MakeDir Directories="$(IntermediateOutputPath)" Condition=" !Exists('$(IntermediateOutputPath)') " />
+		<WriteLinesToFile File="$(GeneratedAssemblyInfoPath)" Overwrite="true"  Lines="@(AssemblyInfoLine)"/>
+		<ItemGroup>
+			<Compile Include="$(GeneratedAssemblyInfoPath)" />
+			<FileWrites Include="$(GeneratedAssemblyInfoPath)" />
+		</ItemGroup>
+	</Target>
+</Project>
