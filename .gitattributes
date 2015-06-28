@@ -1,0 +1,13 @@
+*         text=auto
+
+*.cs      text
+*.config  text
+*.ps1     text
+*.psd1    text
+*.psm1    text
+*.ps1xml  text
+*.targets text
+*.tt      text
+
+*.csproj  text      diff=csharp
+*.sln     text

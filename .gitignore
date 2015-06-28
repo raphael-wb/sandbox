@@ -1,0 +1,22 @@
+/tmp/
+*.snk
+
+#MS Build
+[Bb]in/
+[Oo]bj/
+
+#NuGet
+/packages/
+
+#Visual Studio
+*.suo
+*.user
+*.sln.ide
+/.vs/
+/TestResults/
+
+#Resharper
+*.DotSettings
+
+#Windows
+[Tt]humbs.db
