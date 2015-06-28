@@ -129,4 +129,7 @@
   <data name="InvalidProviderError" xml:space="preserve">
     <value>"{0}" does not resolve as a path of the {1} provider.</value>
   </data>
+  <data name="MSBuildVersionNotFoundError" xml:space="preserve">
+    <value>Unable to find the 64bits MSBuild v{0} on local machine.</value>
+  </data>
 </root>

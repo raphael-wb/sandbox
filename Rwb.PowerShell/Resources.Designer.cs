@@ -95,5 +95,14 @@ namespace Rwb {
                 return ResourceManager.GetString("InvalidProviderError", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unable to find the 64bits MSBuild v{0} on local machine..
+        /// </summary>
+        internal static string MSBuildVersionNotFoundError {
+            get {
+                return ResourceManager.GetString("MSBuildVersionNotFoundError", resourceCulture);
+            }
+        }
     }
 }

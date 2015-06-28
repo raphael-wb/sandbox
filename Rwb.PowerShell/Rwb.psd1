@@ -20,5 +20,7 @@
 	VariablesToExport = @()
 	AliasesToExport = @()
 
+	TypesToProcess = 'Rwb.Types.ps1xml'
+
 	ModuleList = @()
 }
